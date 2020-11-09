@@ -1,4 +1,5 @@
-﻿Imports System.Data.SQLite
+﻿Imports System.Data.Common
+Imports System.Data.SQLite
 Imports System.IO
 Imports System.Runtime.CompilerServices
 
@@ -14,25 +15,40 @@ Module modSQLite
         End With
     End Function
 
-    Private Function SqlQuery(tsql As String) As DataTable
+    Private Function SqlQuery(tsql As String, Optional params As List(Of SQLiteParameter) = Nothing) As DataTable
         SqlQuery = New DataTable
         Using cmd As New SQLiteCommand(tsql, New SQLiteConnection(SQLiteConnectionString, True))
+            If params IsNot Nothing Then
+                For Each param In params
+                    cmd.Parameters.Add(param)
+                Next
+            End If
             cmd.Connection.Open()
             SqlQuery.Load(cmd.ExecuteReader)
             cmd.Connection.Close()
         End Using
     End Function
 
-    Private Function SqlScalar(tsql As String) As Object
+    Private Function SqlScalar(tsql As String, Optional params As List(Of SQLiteParameter) = Nothing) As Object
         Using cmd As New SQLiteCommand(tsql, New SQLiteConnection(SQLiteConnectionString, True))
+            If params IsNot Nothing Then
+                For Each param In params
+                    cmd.Parameters.Add(param)
+                Next
+            End If
             cmd.Connection.Open()
             SqlScalar = cmd.ExecuteScalar
             cmd.Connection.Close()
         End Using
     End Function
 
-    Private Function SqlNonQuery(tsql As String) As Integer
+    Private Function SqlNonQuery(tsql As String, Optional params As List(Of SQLiteParameter) = Nothing) As Integer
         Using cmd As New SQLiteCommand(tsql, New SQLiteConnection(SQLiteConnectionString, True))
+            If params IsNot Nothing Then
+                For Each param In params
+                    cmd.Parameters.Add(param)
+                Next
+            End If
             cmd.Connection.Open()
             SqlNonQuery = cmd.ExecuteNonQuery
             cmd.Connection.Close()
@@ -73,8 +89,16 @@ Module modSQLite
     End Sub
 
     Public Function AddFile(fi As FileInfo)
-        Dim sql As String = "INSERT OR IGNORE INTO Files VALUES ('" & fi.Name.Sqlify & "','" & fi.LastWriteTime & "','" & fi.Extension.Sqlify & "'," & fi.Length & ",'" & fi.DirectoryName.Sqlify & "','',0,0,0,'')"
-        SqlNonQuery(sql)
+        'Dim sql As String = "INSERT OR IGNORE INTO Files VALUES ('" & fi.Name.Sqlify & "','" & fi.LastWriteTime & "','" & fi.Extension.Sqlify & "'," & fi.Length & ",'" & fi.DirectoryName.Sqlify & "','',0,0,0,'')"
+        Dim sql As String = "INSERT OR IGNORE INTO Files VALUES @Name,@LastWriteTime,@Extension,@Length,@DirectoryName,'',0,0,0,''"
+        Dim params As New List(Of SQLiteParameter) From {
+            New SQLiteParameter("@Name", DbType.String) With {.Value = fi.Name},
+            New SQLiteParameter("@LastWriteTime", DbType.String) With {.Value = fi.LastWriteTime},
+            New SQLiteParameter("@Extension", DbType.DateTime) With {.Value = fi.Extension},
+            New SQLiteParameter("@Length", DbType.VarNumeric) With {.Value = fi.Length},
+            New SQLiteParameter("@DirectoryName", DbType.String) With {.Value = fi.DirectoryName}
+        }
+        SqlNonQuery(sql, params)
     End Function
 
     Public Function GetPlayableFileIDs() As List(Of Integer)
@@ -87,15 +111,25 @@ Module modSQLite
     End Function
 
     Public Sub DontPlayFile(id As Integer)
-        SqlNonQuery("UPDATE Files SET DoNotPlay = 1 WHERE rowid = " & id)
+        Dim params As New List(Of SQLiteParameter) From {
+            New SQLiteParameter("@rowid", DbType.Int32) With {.Value = id}
+        }
+        SqlNonQuery("UPDATE Files SET DoNotPlay = 1 WHERE rowid = @id", params)
     End Sub
 
     Public Sub FileWontPlay(id As Integer, ex As Exception)
-        SqlNonQuery("UPDATE Files SET WontPlay = 1, WontPlayReason = '" & ex.Message & "' WHERE rowid = " & id)
+        Dim params As New List(Of SQLiteParameter) From {
+            New SQLiteParameter("@rowid", DbType.Int32) With {.Value = id},
+            New SQLiteParameter("@Message", DbType.String) With {.Value = ex.Message}
+        }
+        SqlNonQuery("UPDATE Files SET WontPlay = 1, WontPlayReason = @Message WHERE rowid = @rowid", params)
     End Sub
 
     Public Function GetFileToPlay(id As Integer) As String
-        GetFileToPlay = SqlScalar("SELECT Filepath || '\' || Filename File FROM Files WHERE rowid = " & id & "; UPDATE Files SET LastPlayed = DATETIME(), TimesPlayed = TimesPlayed + 1 WHERE rowid = " & id & ";")
+        Dim params As New List(Of SQLiteParameter) From {
+            New SQLiteParameter("@rowid", DbType.Int32) With {.Value = id}
+        }
+        GetFileToPlay = SqlScalar("SELECT Filepath || '\' || Filename File FROM Files WHERE rowid = @rowid; UPDATE Files SET LastPlayed = DATETIME(), TimesPlayed = TimesPlayed + 1 WHERE rowid = @rowid;", params)
     End Function
 
     Public Function GetFolders() As List(Of String)
@@ -108,21 +142,21 @@ Module modSQLite
     End Function
 
     Public Sub AddFolder(name As String)
-        SqlNonQuery("INSERT OR IGNORE INTO Folders VALUES ('" & name & "')")
+        Dim params As New List(Of SQLiteParameter) From {
+            New SQLiteParameter("@name", DbType.String) With {.Value = name}
+        }
+        SqlNonQuery("INSERT OR IGNORE INTO Folders VALUES (@name)", params)
     End Sub
 
     Public Sub DeleteFolder(name As String)
-        SqlNonQuery("DELETE FROM Folders WHERE Folder = '" & name & "'")
+        Dim params As New List(Of SQLiteParameter) From {
+            New SQLiteParameter("@name", DbType.String) With {.Value = name}
+        }
+        SqlNonQuery("DELETE FROM Folders WHERE Folder = @name")
     End Sub
 
     Public Sub DeleteAllFolders()
         SqlNonQuery("DELETE FROM Folders")
     End Sub
-
-    <Extension>
-    Private Function Sqlify(value As String) As String
-        value = value.Replace("'", "''")
-        Return value
-    End Function
 
 End Module

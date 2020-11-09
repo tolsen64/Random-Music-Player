@@ -30,6 +30,8 @@ Partial Class Form1
         Me.lblFilename = New System.Windows.Forms.Label()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
         Me.lblFileFullPath = New System.Windows.Forms.Label()
+        Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.OpenFolderToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.btnStop = New System.Windows.Forms.Button()
         Me.btnPause = New System.Windows.Forms.Button()
         Me.btnPlay = New System.Windows.Forms.Button()
@@ -51,18 +53,16 @@ Partial Class Form1
         Me.lblFilesPlayed = New System.Windows.Forms.ToolStripStatusLabel()
         Me.lblDontPlay = New System.Windows.Forms.ToolStripStatusLabel()
         Me.lblWontPlay = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.OpenFolderToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
+        Me.ContextMenuStrip1.SuspendLayout()
         Me.GroupBox4.SuspendLayout()
         Me.GroupBox5.SuspendLayout()
         CType(Me.trkVolume, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.trkSeek, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.MenuStrip1.SuspendLayout()
         Me.StatusStrip1.SuspendLayout()
-        Me.ContextMenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'GroupBox1
@@ -129,6 +129,18 @@ Partial Class Form1
         Me.lblFileFullPath.TabIndex = 0
         Me.lblFileFullPath.Text = "None"
         Me.lblFileFullPath.TextAlign = System.Drawing.ContentAlignment.TopCenter
+        '
+        'ContextMenuStrip1
+        '
+        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenFolderToolStripMenuItem})
+        Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(140, 26)
+        '
+        'OpenFolderToolStripMenuItem
+        '
+        Me.OpenFolderToolStripMenuItem.Name = "OpenFolderToolStripMenuItem"
+        Me.OpenFolderToolStripMenuItem.Size = New System.Drawing.Size(139, 22)
+        Me.OpenFolderToolStripMenuItem.Text = "Open Folder"
         '
         'btnStop
         '
@@ -282,38 +294,30 @@ Partial Class Form1
         'lblTotalFiles
         '
         Me.lblTotalFiles.Name = "lblTotalFiles"
-        Me.lblTotalFiles.Size = New System.Drawing.Size(32, 17)
+        Me.lblTotalFiles.Size = New System.Drawing.Size(31, 17)
         Me.lblTotalFiles.Text = "TF: 0"
+        Me.lblTotalFiles.ToolTipText = "Total Files"
         '
         'lblFilesPlayed
         '
         Me.lblFilesPlayed.Name = "lblFilesPlayed"
         Me.lblFilesPlayed.Size = New System.Drawing.Size(32, 17)
         Me.lblFilesPlayed.Text = "FP: 0"
+        Me.lblFilesPlayed.ToolTipText = "Files Played"
         '
         'lblDontPlay
         '
         Me.lblDontPlay.Name = "lblDontPlay"
         Me.lblDontPlay.Size = New System.Drawing.Size(34, 17)
         Me.lblDontPlay.Text = "DP: 0"
+        Me.lblDontPlay.ToolTipText = "Don't Play"
         '
         'lblWontPlay
         '
         Me.lblWontPlay.Name = "lblWontPlay"
         Me.lblWontPlay.Size = New System.Drawing.Size(37, 17)
         Me.lblWontPlay.Text = "WP: 0"
-        '
-        'ContextMenuStrip1
-        '
-        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenFolderToolStripMenuItem})
-        Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(153, 48)
-        '
-        'OpenFolderToolStripMenuItem
-        '
-        Me.OpenFolderToolStripMenuItem.Name = "OpenFolderToolStripMenuItem"
-        Me.OpenFolderToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
-        Me.OpenFolderToolStripMenuItem.Text = "Open Folder"
+        Me.lblWontPlay.ToolTipText = "Won't Play"
         '
         'Form1
         '
@@ -340,6 +344,7 @@ Partial Class Form1
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox3.ResumeLayout(False)
+        Me.ContextMenuStrip1.ResumeLayout(False)
         Me.GroupBox4.ResumeLayout(False)
         Me.GroupBox5.ResumeLayout(False)
         CType(Me.trkVolume, System.ComponentModel.ISupportInitialize).EndInit()
@@ -348,7 +353,6 @@ Partial Class Form1
         Me.MenuStrip1.PerformLayout()
         Me.StatusStrip1.ResumeLayout(False)
         Me.StatusStrip1.PerformLayout()
-        Me.ContextMenuStrip1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
