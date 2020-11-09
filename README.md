@@ -1,4 +1,4 @@
-# Random-Music-Player
+# Random Music Player
 A bare-bones player that picks random tracks from your music collection. It uses a local SQLite Database to store data.
 
 # Main Window
