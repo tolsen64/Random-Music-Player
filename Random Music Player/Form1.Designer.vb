@@ -129,6 +129,7 @@ Partial Class Form1
         Me.lblFileFullPath.TabIndex = 0
         Me.lblFileFullPath.Text = "None"
         Me.lblFileFullPath.TextAlign = System.Drawing.ContentAlignment.TopCenter
+        Me.ToolTip1.SetToolTip(Me.lblFileFullPath, "Double-Click to open this folder.")
         '
         'ContextMenuStrip1
         '

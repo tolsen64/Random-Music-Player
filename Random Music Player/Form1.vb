@@ -166,4 +166,12 @@ Public Class Form1
     Private Sub OpenFolderToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OpenFolderToolStripMenuItem.Click
         Process.Start(lblFileFullPath.Text)
     End Sub
+
+    Private Sub lblFileFullPath_Click(sender As Object, e As EventArgs) Handles lblFileFullPath.Click
+        If (Directory.Exists(lblFileFullPath.Text)) Then
+            Process.Start(lblFileFullPath.Text)
+        Else
+            MsgBox("Folder not found")
+        End If
+    End Sub
 End Class

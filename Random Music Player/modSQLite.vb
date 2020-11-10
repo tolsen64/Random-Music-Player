@@ -90,11 +90,11 @@ Module modSQLite
 
     Public Function AddFile(fi As FileInfo)
         'Dim sql As String = "INSERT OR IGNORE INTO Files VALUES ('" & fi.Name.Sqlify & "','" & fi.LastWriteTime & "','" & fi.Extension.Sqlify & "'," & fi.Length & ",'" & fi.DirectoryName.Sqlify & "','',0,0,0,'')"
-        Dim sql As String = "INSERT OR IGNORE INTO Files VALUES @Name,@LastWriteTime,@Extension,@Length,@DirectoryName,'',0,0,0,''"
+        Dim sql As String = "INSERT OR IGNORE INTO Files VALUES (@Name,@LastWriteTime,@Extension,@Length,@DirectoryName,'',0,0,0,'')"
         Dim params As New List(Of SQLiteParameter) From {
             New SQLiteParameter("@Name", DbType.String) With {.Value = fi.Name},
-            New SQLiteParameter("@LastWriteTime", DbType.String) With {.Value = fi.LastWriteTime},
-            New SQLiteParameter("@Extension", DbType.DateTime) With {.Value = fi.Extension},
+            New SQLiteParameter("@LastWriteTime", DbType.DateTime) With {.Value = fi.LastWriteTime},
+            New SQLiteParameter("@Extension", DbType.String) With {.Value = fi.Extension},
             New SQLiteParameter("@Length", DbType.VarNumeric) With {.Value = fi.Length},
             New SQLiteParameter("@DirectoryName", DbType.String) With {.Value = fi.DirectoryName}
         }

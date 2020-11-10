@@ -58,6 +58,7 @@ Module modNAudio
     End Sub
 
     Public Function GetMediaLength() As TimeSpan
+        If audFileReader Is Nothing Then Return New TimeSpan()
         Return audFileReader.TotalTime
     End Function
 
