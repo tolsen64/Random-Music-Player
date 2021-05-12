@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("Plays files in your music library in random order")>
 <Assembly: AssemblyCompany("Donations accepted: https://www.paypal.me/tolsen64")>
 <Assembly: AssemblyProduct("Random Music Player")>
-<Assembly: AssemblyCopyright("Copyright ©  2017")>
+<Assembly: AssemblyCopyright("Copyright ©  2017-2021")>
 <Assembly: AssemblyTrademark("")>
 
 <Assembly: ComVisible(False)>
