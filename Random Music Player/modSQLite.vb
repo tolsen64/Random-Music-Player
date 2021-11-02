@@ -43,16 +43,27 @@ Module modSQLite
     End Function
 
     Private Function SqlNonQuery(tsql As String, Optional params As List(Of SQLiteParameter) = Nothing) As Integer
-        Using cmd As New SQLiteCommand(tsql, New SQLiteConnection(SQLiteConnectionString, True))
-            If params IsNot Nothing Then
-                For Each param In params
-                    cmd.Parameters.Add(param)
-                Next
-            End If
-            cmd.Connection.Open()
-            SqlNonQuery = cmd.ExecuteNonQuery
-            cmd.Connection.Close()
+        Using conn As New SQLiteConnection(SQLiteConnectionString, True)
+            conn.Open()
+            Using cmd As New SQLiteCommand(tsql, conn)
+                If params IsNot Nothing Then
+                    For Each param In params
+                        cmd.Parameters.Add(param)
+                    Next
+                End If
+                SqlNonQuery = cmd.ExecuteNonQuery
+            End Using
         End Using
+        'Using cmd As New SQLiteCommand(tsql, New SQLiteConnection(SQLiteConnectionString, True))
+        '    If params IsNot Nothing Then
+        '        For Each param In params
+        '            cmd.Parameters.Add(param)
+        '        Next
+        '    End If
+        '    cmd.Connection.Open()
+        '    SqlNonQuery = cmd.ExecuteNonQuery
+        '    cmd.Connection.Close()
+        'End Using
     End Function
 
     Public Sub CreateDatabase()
@@ -88,7 +99,7 @@ Module modSQLite
         SqlNonQuery(sql)
     End Sub
 
-    Public Function AddFile(fi As FileInfo)
+    Public Sub AddFile(fi As FileInfo)
         'Dim sql As String = "INSERT OR IGNORE INTO Files VALUES ('" & fi.Name.Sqlify & "','" & fi.LastWriteTime & "','" & fi.Extension.Sqlify & "'," & fi.Length & ",'" & fi.DirectoryName.Sqlify & "','',0,0,0,'')"
         Dim sql As String = "INSERT OR IGNORE INTO Files VALUES (@Name,@LastWriteTime,@Extension,@Length,@DirectoryName,'',0,0,0,'')"
         Dim params As New List(Of SQLiteParameter) From {
@@ -99,7 +110,7 @@ Module modSQLite
             New SQLiteParameter("@DirectoryName", DbType.String) With {.Value = fi.DirectoryName}
         }
         SqlNonQuery(sql, params)
-    End Function
+    End Sub
 
     Public Function GetPlayableFileIDs() As List(Of Integer)
         GetPlayableFileIDs = New List(Of Integer)
@@ -111,10 +122,13 @@ Module modSQLite
     End Function
 
     Public Sub DontPlayFile(id As Integer)
-        Dim params As New List(Of SQLiteParameter) From {
-            New SQLiteParameter("@rowid", DbType.Int32) With {.Value = id}
-        }
-        SqlNonQuery("UPDATE Files SET DoNotPlay = 1 WHERE rowid = @id", params)
+        'Dim params As New List(Of SQLiteParameter) From {
+        '    New SQLiteParameter("@rowid", DbType.Int32) With {.Value = id}
+        '}
+        'SqlNonQuery("UPDATE Files SET DoNotPlay = 1 WHERE rowid = @id", params)
+        ' Had to comment out the above because SqlNonQuery was throwing "Insufficient parameters supplied to the command" and I couldn't get it to work.
+        ' so now just include the id in the command instead of using parameters
+        SqlNonQuery($"UPDATE Files SET DoNotPlay = 1 WHERE rowid = {id}")
     End Sub
 
     Public Sub FileWontPlay(id As Integer, ex As Exception)
