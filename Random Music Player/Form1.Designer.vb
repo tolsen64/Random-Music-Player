@@ -288,6 +288,7 @@ Partial Class Form1
         Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.lblTotalFiles, Me.lblFilesPlayed, Me.lblDontPlay, Me.lblWontPlay})
         Me.StatusStrip1.Location = New System.Drawing.Point(0, 222)
         Me.StatusStrip1.Name = "StatusStrip1"
+        Me.StatusStrip1.ShowItemToolTips = True
         Me.StatusStrip1.Size = New System.Drawing.Size(622, 22)
         Me.StatusStrip1.TabIndex = 14
         Me.StatusStrip1.Text = "StatusStrip1"
@@ -304,21 +305,21 @@ Partial Class Form1
         Me.lblFilesPlayed.Name = "lblFilesPlayed"
         Me.lblFilesPlayed.Size = New System.Drawing.Size(32, 17)
         Me.lblFilesPlayed.Text = "FP: 0"
-        Me.lblFilesPlayed.ToolTipText = "Files Played"
+        Me.lblFilesPlayed.ToolTipText = "Count of Files Played during this session"
         '
         'lblDontPlay
         '
         Me.lblDontPlay.Name = "lblDontPlay"
         Me.lblDontPlay.Size = New System.Drawing.Size(34, 17)
         Me.lblDontPlay.Text = "DP: 0"
-        Me.lblDontPlay.ToolTipText = "Don't Play"
+        Me.lblDontPlay.ToolTipText = "Count of Don't Play files"
         '
         'lblWontPlay
         '
         Me.lblWontPlay.Name = "lblWontPlay"
         Me.lblWontPlay.Size = New System.Drawing.Size(37, 17)
         Me.lblWontPlay.Text = "WP: 0"
-        Me.lblWontPlay.ToolTipText = "Won't Play"
+        Me.lblWontPlay.ToolTipText = "Count of Won't Play files"
         '
         'Form1
         '

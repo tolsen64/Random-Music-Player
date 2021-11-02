@@ -7,11 +7,17 @@ Public Class Form1
     Dim WithEvents tm As New Timer With {.Enabled = False, .Interval = 1000}
     Dim _rnd As New Random
     Dim fp As Integer = 0
+    Dim DontPlayCount As Integer = 0
+    Dim WontPlayCount As Integer = 0
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles Me.Load
         CreateDatabase()
         FileIDs = GetPlayableFileIDs()
         lblTotalFiles.Text = "TF: " & FileIDs.Count.ToString
+        DontPlayCount = GetDontPlayCount()
+        lblDontPlay.Text = $"DP: {DontPlayCount}"
+        WontPlayCount = GetWontPlayCount()
+        lblWontPlay.Text = $"WP: {WontPlayCount}"
         AddHandler modNAudio.NAudioPlaybackStopped, Sub(ex As Exception) btnPlay.PerformClick()
         AddHandler modNAudio.NAudioFileReadError, Sub(ex As Exception) FileWontPlay(ex)
     End Sub
@@ -86,6 +92,8 @@ Public Class Form1
         Dim id As Integer = CInt(lblID.Text)
         DontPlayFile(id)
         FileIDs.Remove(id)
+        DontPlayCount += 1
+        lblDontPlay.Text = $"DP: {DontPlayCount}"
         btnPlay.PerformClick()
     End Sub
 
@@ -93,6 +101,8 @@ Public Class Form1
         Dim id As Integer = CInt(lblID.Text)
         modSQLite.FileWontPlay(id, ex)
         FileIDs.Remove(id)
+        WontPlayCount += 1
+        lblWontPlay.Text = $"WP: {WontPlayCount}"
         BeginInvoke(Sub() btnPlay.PerformClick())
     End Sub
 

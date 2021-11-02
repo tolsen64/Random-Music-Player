@@ -121,6 +121,14 @@ Module modSQLite
         GetPlayableFileIDs.Sort()
     End Function
 
+    Public Function GetDontPlayCount() As Integer
+        Return SqlScalar("SELECT COUNT(*) FROM Files WHERE DoNotPlay = 1")
+    End Function
+
+    Public Function GetWontPlayCount() As Integer
+        Return SqlScalar("SELECT COUNT(*) FROM Files WHERE WontPlay = 1")
+    End Function
+
     Public Sub DontPlayFile(id As Integer)
         'Dim params As New List(Of SQLiteParameter) From {
         '    New SQLiteParameter("@rowid", DbType.Int32) With {.Value = id}
