@@ -7,4 +7,4 @@ A bare-bones player that picks random tracks from your music collection. It uses
 # Settings
 ![Settings](https://user-images.githubusercontent.com/5026562/98600824-67b32100-229b-11eb-848d-2481cdf76382.png)
 
-![Hit Counter](http://theboycot.com:8080/hc?id=GitHub.RandomMusicPlayer "My Stupid Hit Counter!")
+![Hit Counter](http://tolsen64.com:8081/api/hc/GitHub.RandomMusicPlayer "My Stupid Hit Counter!")
